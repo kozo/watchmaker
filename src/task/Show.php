@@ -13,36 +13,43 @@ class Show
 
     public function execute(array $taskList)
     {
-        echo Decorator::hr();
+        $output = '';
+        $output .= Decorator::newLine();
+        $output .= Decorator::hr();
         // echo "# Kairos\n\n";
 
         // for installed / not installed
-        echo Decorator::alert('Installed / Not Install');
+        $output .= Decorator::alert('Installed / Not Install');
         foreach ($taskList as $task)
         {
-            $this->showLine($task);
+            $output .= $this->showLine($task);
         }
 
+        $output .= Decorator::newLine();
+
         // for delete
-        echo "\n\n";
-        echo Decorator::alert('Delete for crontab');
+        $output .= Decorator::alert('Delete for crontab');
         $prevList = LockLoader::load();
         foreach ($prevList as $prevTask)
         {
-            $this->showDeleteLine($prevTask, $taskList);
+            $text = $this->showDeleteLine($prevTask, $taskList);
+            if (!empty($text)) {
+                $output .= $text;
+            }
         }
 
-        Decorator::newLine();
+        $output .= Decorator::newLine();
 
         if ($this->isAllGreen === true) {
-            Decorator::flashSuccess();
+            $output .= Decorator::flashSuccess();
         } else {
-            Decorator::flashError();
+            $output .= Decorator::flashError();
         }
 
-        Decorator::newLine();
-        echo Decorator::hr();
-        return ;
+        $output .= Decorator::newLine();
+        $output .= Decorator::hr();
+
+        return $output;
         /*if ($rand === 1) {
             echo "[ ✔ ]\t" . $consoleColor->apply("color_82", $cron);
         } else if($rand === 2) {
@@ -57,11 +64,13 @@ class Show
         $consoleColor = new \JakubOnderka\PhpConsoleColor\ConsoleColor();
 
         if ($kairos->isInstalled()) {
-            echo "[ ✔ ]\t" . Decorator::greenText($kairos->generate());
+            $text = "[ ✔ ]\t" . Decorator::greenText($kairos->generate());
         } else {
-            echo "[ ➖ ]\t" . $consoleColor->apply('color_226', $kairos->generate());
+            $text = "[ ➖ ]\t" . $consoleColor->apply('color_226', $kairos->generate());
             $this->isAllGreen = false;
         }
+
+        return $text;
     }
 
     private function showDeleteLine(WatchmakerCore $prevTask, array $taskList)
@@ -69,7 +78,7 @@ class Show
         foreach($taskList as $task)
         {
             if ($prevTask->generate() === $task->generate()) {
-                return ;
+                return '';
             }
         }
 
@@ -83,12 +92,15 @@ class Show
             }
         }
 
+        $text = '';
         if ($isInstalled === true) {
             $consoleColor = new \JakubOnderka\PhpConsoleColor\ConsoleColor();
-            echo "[ ❌ ]\t" . $consoleColor->apply("color_196", $prevTask->generate());
+            $text = "[ ❌ ]\t" . $consoleColor->apply("color_196", $prevTask->generate());
 
             $this->isAllGreen = false;
         }
+
+        return $text;
     }
 
 

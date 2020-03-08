@@ -22,11 +22,11 @@ class Watchmaker
     {
         $show = new Show();
 
-        $show->execute($this->taskList);
+        return $show->execute($this->taskList);
     }
 
     public function install()
     {
-
+        echo "インストール実行";
     }
 }

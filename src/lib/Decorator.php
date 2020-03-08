@@ -25,30 +25,36 @@ class Decorator
         return $outText;
     }
 
-    public static function flashSuccess($text = ' All Installed')
+    public static function flashSuccess($message = ' All Installed')
     {
         $consoleColor = new ConsoleColor();
         $width  = intval(trim(`tput cols`));
 
+        $text = '';
         $b = $consoleColor->apply("color_22", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_22", $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_22", $b) . "\n";
         $b = $consoleColor->apply("color_20", str_repeat(' ', $width-14));
-        echo $consoleColor->apply("bg_color_22", $text . $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_22", $message . $b) . "\n";
         $b = $consoleColor->apply("color_22", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_22", $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_22", $b) . "\n";
+
+        return $text;
     }
 
-    public static function flashError($text = ' crontab needs to be updated.')
+    public static function flashError($message = ' crontab needs to be updated.')
     {
         $consoleColor = new ConsoleColor();
         $width  = intval(trim(`tput cols`));
 
+        $text = '';
         $b = $consoleColor->apply("color_1", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_1", $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_1", $b) . "\n";
         $b = $consoleColor->apply("color_20", str_repeat(' ', $width - 29));
-        echo $consoleColor->apply("bg_color_1", $text . $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_1", $message . $b) . "\n";
         $b = $consoleColor->apply("color_1", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_1", $b) . "\n";
+        $text .= $consoleColor->apply("bg_color_1", $b) . "\n";
+
+        return $text;
     }
 
     public static function hr()
@@ -59,6 +65,6 @@ class Decorator
 
     public static function newLine()
     {
-        echo "\n";
+        return "\n";
     }
 }
