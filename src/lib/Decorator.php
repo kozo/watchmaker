@@ -2,63 +2,95 @@
 declare(strict_types=1);
 namespace Watchmaker\lib;
 
-use JakubOnderka\PhpConsoleColor\ConsoleColor;
-
 class Decorator
 {
-    public static function greenText($text)
+    private $color = null;
+    private $collector = null;
+
+    public function __construct(StringCollector $collector)
     {
-        $consoleColor = new ConsoleColor();
-        return $consoleColor->apply('color_82', $text);
+        $this->color = new Color();
+        $this->collector = $collector;
     }
 
-    public static function alert($text)
+    public function simple($text)
     {
-        $consoleColor = new ConsoleColor();
+        $this->collector->text($text);
+    }
+
+    public function greenText($text)
+    {
+        $d = $this->color->apply('color_82', $text);
+        $this->collector->text($d);
+    }
+
+    public function yellowText($text)
+    {
+        $d = $this->color->apply('color_226', $text);
+        $this->collector->text($d);
+    }
+
+    public function redText($text)
+    {
+        $d = $this->color->apply('color_196', $text);
+        $this->collector->text($d);
+    }
+
+    public function alert($text)
+    {
         $length = mb_strlen($text) + 12;
 
         $outText = '';
-        $outText .= $consoleColor->apply('color_130', str_repeat('*', $length)) . "\n";
-        $outText .= $consoleColor->apply('color_130', '*     ' . $text . '     *') . "\n";
-        $outText .= $consoleColor->apply('color_130', str_repeat('*', $length)) . "\n";
+        $outText .= $this->color->apply('color_130', str_repeat('*', $length)) . "\n";
+        $outText .= $this->color->apply('color_130', '*     ' . $text . '     *') . "\n";
+        $outText .= $this->color->apply('color_130', str_repeat('*', $length)) . "\n";
 
-        return $outText;
+        $this->collector->text($outText);
     }
 
-    public static function flashSuccess($text = ' All Installed')
-    {
-        $consoleColor = new ConsoleColor();
-        $width  = intval(trim(`tput cols`));
-
-        $b = $consoleColor->apply("color_22", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_22", $b) . "\n";
-        $b = $consoleColor->apply("color_20", str_repeat(' ', $width-14));
-        echo $consoleColor->apply("bg_color_22", $text . $b) . "\n";
-        $b = $consoleColor->apply("color_22", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_22", $b) . "\n";
-    }
-
-    public static function flashError($text = ' crontab needs to be updated.')
-    {
-        $consoleColor = new ConsoleColor();
-        $width  = intval(trim(`tput cols`));
-
-        $b = $consoleColor->apply("color_1", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_1", $b) . "\n";
-        $b = $consoleColor->apply("color_20", str_repeat(' ', $width - 29));
-        echo $consoleColor->apply("bg_color_1", $text . $b) . "\n";
-        $b = $consoleColor->apply("color_1", str_repeat('-', $width));
-        echo $consoleColor->apply("bg_color_1", $b) . "\n";
-    }
-
-    public static function hr()
+    public function flashSuccess($message = ' All Installed')
     {
         $width  = intval(trim(`tput cols`));
-        return str_repeat('-', $width) . "\n";
+        $length = mb_strlen($message);
+
+        $text = '';
+        $b = $this->color->apply('color_22', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_22', $b) . "\n";
+        $b = $this->color->apply('color_22', str_repeat('-', $width - $length));
+        $text .= $this->color->apply('bg_color_22', $message . $b) . "\n";
+        $b = $this->color->apply('color_22', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_22', $b) . "\n";
+
+        $this->collector->text($text);
     }
 
-    public static function newLine()
+    public function flashError($message = ' Please update crontab.')
     {
-        echo "\n";
+        $width  = intval(trim(`tput cols`));
+        $length = mb_strlen($message);
+
+        $text = '';
+        $b = $this->color->apply('color_1', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_1', $b) . "\n";
+        $b = $this->color->apply('color_1', str_repeat('-', $width - $length));
+        $text .= $this->color->apply('bg_color_1', $message . $b) . "\n";
+        $b = $this->color->apply('color_1', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_1', $b) . "\n";
+
+        $this->collector->text($text);
+    }
+
+    public function hr()
+    {
+        $width  = intval(trim(`tput cols`));
+        $d = str_repeat('-', $width) . "\n";
+        $this->collector->text($d);
+    }
+
+    public function newLine($line = 1)
+    {
+        for ($i=0; $i < $line; $i++) {
+            $this->collector->text("\n", false);
+        }
     }
 }

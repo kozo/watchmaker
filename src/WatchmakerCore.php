@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Watchmaker;
 
-use Watchmaker\error\CronLineParseException;
-use Watchmaker\lib\CrontabLoader;
+use Watchmaker\error\EmptyCommandException;
 
 class WatchmakerCore
 {
     private $command = '';
+    private $rawLine = '';
 
     private $month = '*';
     private $day = '*';
@@ -15,8 +15,15 @@ class WatchmakerCore
     private $minute = '*';
     private $week = '*';
 
+    public const INSTALLED = 1;
+    public const NOT_INSTALLED = 2;
+    public const CRON_ONLY = 3;
+    private $mark = null;
+
+    private $manage = true;
+
     /**
-     * Kairos constructor.
+     * WatchmakerCore constructor.
      * @param string $command
      */
     public function __construct($command = '')
@@ -35,7 +42,9 @@ class WatchmakerCore
         $cronLine = trim($cronLine);
         $arr = explode(' ', $cronLine, 6);
         if (count($arr) !== 6) {
-            throw new CronLineParseException();
+            // not cron line
+            return $instance
+                ->rawLine($cronLine);
         }
 
         $instance = $instance
@@ -56,7 +65,7 @@ class WatchmakerCore
     public function month($v) : self
     {
         $new = clone $this;
-        $new->month = $v;
+        $new->month = (string)$v;
 
         return $new;
     }
@@ -68,7 +77,7 @@ class WatchmakerCore
     public function day($v) : self
     {
         $new = clone $this;
-        $new->day = $v;
+        $new->day = (string)$v;
 
         return $new;
     }
@@ -80,7 +89,7 @@ class WatchmakerCore
     public function hour($v) : self
     {
         $new = clone $this;
-        $new->hour = $v;
+        $new->hour = (string)$v;
 
         return $new;
     }
@@ -92,7 +101,7 @@ class WatchmakerCore
     public function minute($v) : self
     {
         $new = clone $this;
-        $new->minute = $v;
+        $new->minute = (string)$v;
 
         return $new;
     }
@@ -104,7 +113,7 @@ class WatchmakerCore
     public function week($v) : self
     {
         $new = clone $this;
-        $new->week = $v;
+        $new->week = (string)$v;
 
         return $new;
     }
@@ -144,7 +153,7 @@ class WatchmakerCore
         return $this->week(7);
     }
 
-    public function command($v)
+    public function command($v) : self
     {
         $new = clone $this;
         $new->command = $v;
@@ -152,7 +161,76 @@ class WatchmakerCore
         return $new;
     }
 
+    public function mark($mark) : self
+    {
+        $new = clone $this;
+        $new->mark = $mark;
+
+        return $new;
+    }
+
+    public function manage(bool $manage) : self
+    {
+        $new = clone $this;
+        $new->manage = $manage;
+
+        return $new;
+    }
+
+    public function rawLine(string $rawLine) : self
+    {
+        $new = clone $this;
+        $new->rawLine = $rawLine;
+        $new->manage = false;
+
+        return $new;
+    }
+
+    public function installed() : self
+    {
+        $new = clone $this;
+        $new->mark = self::INSTALLED;
+
+        return $new;
+    }
+
+    public function notInstalled() : self
+    {
+        $new = clone $this;
+        $new->mark = self::NOT_INSTALLED;
+
+        return $new;
+    }
+
+    public function cronOnly() : self
+    {
+        $new = clone $this;
+        $new->mark = self::CRON_ONLY;
+
+        return $new;
+    }
+
     public function isInstalled() : bool
+    {
+        return $this->mark === self::INSTALLED;
+    }
+
+    public function isNotInstalled() : bool
+    {
+        return $this->mark === self::NOT_INSTALLED;
+    }
+
+    public function isCronOnly() : bool
+    {
+        return $this->mark === self::CRON_ONLY;
+    }
+
+    public function isManage() : bool
+    {
+        return $this->manage;
+    }
+
+    /*public function isInstalled() : bool
     {
         $originList = CrontabLoader::load();
         foreach($originList as $originKairos)
@@ -164,10 +242,22 @@ class WatchmakerCore
         }
 
         return false;
-    }
+    }*/
 
+
+    /**
+     * @return string
+     * @throws EmptyCommandException
+     */
     public function generate() : string
     {
-        return sprintf("%s %s %s %s %s %s\n", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
+        if ($this->manage === true) {
+            if (empty($this->command)) {
+                throw new EmptyCommandException();
+            }
+            return sprintf("%s %s %s %s %s %s", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
+        } else {
+            return $this->rawLine;
+        }
     }
 }
