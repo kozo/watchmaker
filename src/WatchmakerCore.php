@@ -15,8 +15,13 @@ class WatchmakerCore
     private $minute = '*';
     private $week = '*';
 
+    public const INSTALLED = 1;
+    public const NOT_INSTALLED = 2;
+    public const DELETED = 3;
+    private $mark = null;
+
     /**
-     * Kairos constructor.
+     * WatchmakerCore constructor.
      * @param string $command
      */
     public function __construct($command = '')
@@ -27,6 +32,7 @@ class WatchmakerCore
     /**
      * @param $cronLine
      * @return WatchmakerCore
+     * @throws CronLineParseException
      */
     public static function parse($cronLine) : WatchmakerCore
     {
@@ -35,6 +41,8 @@ class WatchmakerCore
         $cronLine = trim($cronLine);
         $arr = explode(' ', $cronLine, 6);
         if (count($arr) !== 6) {
+            // @todo : コメント等の処理以外の行が無視される
+            // @todo : 単純に6個に分割だと、コメントの中に6個分割があるとエラーになる
             throw new CronLineParseException();
         }
 
@@ -144,10 +152,34 @@ class WatchmakerCore
         return $this->week(7);
     }
 
-    public function command($v)
+    public function command($v) : self
     {
         $new = clone $this;
         $new->command = $v;
+
+        return $new;
+    }
+
+    public function mark($mark) : self
+    {
+        $new = clone $this;
+        $new->mark = $mark;
+
+        return $new;
+    }
+
+    public function installed() : self
+    {
+        $new = clone $this;
+        $new->mark = self::INSTALLED;
+
+        return $new;
+    }
+
+    public function notInstalled() : self
+    {
+        $new = clone $this;
+        $new->mark = self::NOT_INSTALLED;
 
         return $new;
     }

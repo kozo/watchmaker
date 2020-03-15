@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Watchmaker;
 
+use Watchmaker\task\Install;
 use Watchmaker\task\Show;
 
 class Watchmaker
@@ -27,6 +28,8 @@ class Watchmaker
 
     public function install()
     {
-        echo "インストール実行";
+        $install = new Install();
+
+        return $install->execute($this->taskList);
     }
 }
