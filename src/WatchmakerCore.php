@@ -17,7 +17,7 @@ class WatchmakerCore
 
     public const INSTALLED = 1;
     public const NOT_INSTALLED = 2;
-    public const DELETED = 3;
+    public const CRON_ONLY = 3;
     private $mark = null;
 
     /**
@@ -184,7 +184,30 @@ class WatchmakerCore
         return $new;
     }
 
+    public function cronOnly() : self
+    {
+        $new = clone $this;
+        $new->mark = self::CRON_ONLY;
+
+        return $new;
+    }
+
     public function isInstalled() : bool
+    {
+        return $this->mark === self::INSTALLED;
+    }
+
+    public function isNotInstalled() : bool
+    {
+        return $this->mark === self::NOT_INSTALLED;
+    }
+
+    public function isCronOnly() : bool
+    {
+        return $this->mark === self::CRON_ONLY;
+    }
+
+    /*public function isInstalled() : bool
     {
         $originList = CrontabLoader::load();
         foreach($originList as $originKairos)
@@ -196,7 +219,7 @@ class WatchmakerCore
         }
 
         return false;
-    }
+    }*/
 
     public function generate() : string
     {

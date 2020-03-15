@@ -18,7 +18,7 @@ class Install
         $ret = $cron->write($newList);
         if ($ret === false) {
             echo "hogehoge";
-        }
+        }//*/
         dump($newList);
     }
 }

@@ -11,18 +11,33 @@ class Diff
     {
         $newList = [];
 
-        foreach ($watchmakerList as $index=>$watchmaker)
+        // check install or not install
+        foreach ($watchmakerList as $watchmaker)
         {
             $watchmakerLine = $watchmaker->generate();
             foreach ($cronList as $cron)
             {
-                if ($watchmakerLine == $cron->generate()) {
-                    $newList[$index] = $watchmaker->installed();
+                if ($watchmakerLine === $cron->generate()) {
+                    $newList[] = $watchmaker->installed();
                     continue 2;
                 }
             }
 
-            $newList[$index] = $watchmaker->notInstalled();
+            $newList[] = $watchmaker->notInstalled();
+        }
+
+        // check cron only
+        foreach ($cronList as $cron)
+        {
+            $cronLine = $cron->generate();
+            foreach ($watchmakerList as $watchmaker)
+            {
+                if ($cronLine === $watchmaker->generate()) {
+                    continue 2;
+                }
+            }
+
+            $newList[] = $cron->cronOnly();
         }
 
         return $newList;
