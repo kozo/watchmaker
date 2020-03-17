@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Watchmaker\lib;
 
 // @todo : クラス名Diffじゃない.　そもそもここでいいのか？
+use Watchmaker\Watchmaker;
 use Watchmaker\WatchmakerCore;
 
 class Diff
@@ -27,17 +28,20 @@ class Diff
         }
 
         // check cron only
-        foreach ($cronList as $cron)
-        {
-            $cronLine = $cron->generate();
-            foreach ($watchmakerList as $watchmaker)
+        $config = Watchmaker::getConfig();
+        if ($config->delete === false) {
+            foreach ($cronList as $cron)
             {
-                if ($cronLine === $watchmaker->generate()) {
-                    continue 2;
+                $cronLine = $cron->generate();
+                foreach ($watchmakerList as $watchmaker)
+                {
+                    if ($cronLine === $watchmaker->generate()) {
+                        continue 2;
+                    }
                 }
-            }
 
-            $newList[] = $cron->cronOnly();
+                $newList[] = $cron->cronOnly();
+            }
         }
 
         return $newList;

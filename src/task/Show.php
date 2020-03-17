@@ -10,29 +10,32 @@ use Watchmaker\WatchmakerCore;
 
 class Show
 {
+    private $decorator = null;
     private $isAllGreen = true;
 
     public function execute(array $taskList)
     {
+        $this->decorator = new Decorator();
+
         $cronList = CrontabLoader::load();
 
         $output = '';
-        $output .= Decorator::newLine();
-        $output .= Decorator::hr();
+        $output .= $this->decorator->newLine();
+        $output .= $this->decorator->hr();
         // echo "# Kairos\n\n";
 
         // for installed / not installed
-        $output .= Decorator::alert('Installed / Not Install');
+        $output .= $this->decorator->alert('Installed / Not Install');
         $newList = Diff::execute($taskList, $cronList);
         foreach ($newList as $task)
         {
             $output .= $this->showLine($task);
         }
 
-        $output .= Decorator::newLine();
+        $output .= $this->decorator->newLine();
 
         // for delete
-        /*$output .= Decorator::alert('Delete for crontab');
+        /*$output .= $this->>decorator->alert('Delete for crontab');
         $prevList = LockLoader::load();
         foreach ($prevList as $prevTask)
         {
@@ -42,16 +45,16 @@ class Show
             }
         }*/
 
-        $output .= Decorator::newLine();
+        $output .= $this->decorator->newLine();
 
         if ($this->isAllGreen === true) {
-            $output .= Decorator::flashSuccess();
+            $output .= $this->decorator->flashSuccess();
         } else {
-            $output .= Decorator::flashError();
+            $output .= $this->decorator->flashError();
         }
 
-        $output .= Decorator::newLine();
-        $output .= Decorator::hr();
+        $output .= $this->decorator->newLine();
+        $output .= $this->decorator->hr();
 
         return $output;
         /*if ($rand === 1) {
@@ -65,19 +68,17 @@ class Show
 
     private function showLine(WatchmakerCore $watchmaker)
     {
-        $consoleColor = new \JakubOnderka\PhpConsoleColor\ConsoleColor();
-
         if ($watchmaker->isInstalled()) {
-            $text = "[ ✔ ]\t" . Decorator::greenText($watchmaker->generate());
+            $text = "[ ✔ ]\t" . $this->decorator->greenText($watchmaker->generate());
         } elseif ($watchmaker->isNotInstalled()) {
-            $text = "[ ➖ ]\t" . $consoleColor->apply('color_226', $watchmaker->generate());
+            $text = "[ ➖ ]\t" . $this->decorator->yellowText($watchmaker->generate());
             $this->isAllGreen = false;
         } elseif ($watchmaker->isCronOnly()) {
-            $text = "[ ❌ ]\t" . $consoleColor->apply("color_196", $watchmaker->generate());
+            $text = "[ ❌ ]\t" . $this->decorator->redText($watchmaker->generate());
             $this->isAllGreen = false;
         }
         /*if ($kairos->isInstalled()) {
-            $text = "[ ✔ ]\t" . Decorator::greenText($kairos->generate());
+            $text = "[ ✔ ]\t" . $this->greenText($kairos->generate());
         } else {
             $text = "[ ➖ ]\t" . $consoleColor->apply('color_226', $kairos->generate());
             $this->isAllGreen = false;
