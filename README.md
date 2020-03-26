@@ -1,6 +1,7 @@
 # watchmaker
 
 - [ ] dragonmantank/cron-expressionを利用してcronの書式をチェックする
+- [ ] テンプレート作成機能を作る
 - [ ] オプションを追加する
   - [ ] -b バックアップオプション
   - [ ] -d watchmakerに存在しないものはcronから削除する
