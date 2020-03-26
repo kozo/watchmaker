@@ -8,7 +8,7 @@ use Watchmaker\WatchmakerCore;
 
 class Diff
 {
-    public static function execute($watchmakerList, $cronList)
+    public static function execute($watchmakerList, $cronList, $skipUnManage = false)
     {
         $newList = [];
 
@@ -40,7 +40,11 @@ class Diff
                     }
                 }
 
-                $newList[] = $cron->cronOnly();
+                dump($skipUnManage);
+                dump($cron);
+                if ($skipUnManage === true && $cron->isManage() === true) {
+                    $newList[] = $cron->cronOnly();
+                }
             }
         }
 

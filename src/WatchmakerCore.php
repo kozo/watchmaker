@@ -8,6 +8,7 @@ use Watchmaker\lib\CrontabLoader;
 class WatchmakerCore
 {
     private $command = '';
+    private $rawLine = '';
 
     private $month = '*';
     private $day = '*';
@@ -19,6 +20,8 @@ class WatchmakerCore
     public const NOT_INSTALLED = 2;
     public const CRON_ONLY = 3;
     private $mark = null;
+
+    private $manage = true;
 
     /**
      * WatchmakerCore constructor.
@@ -41,9 +44,10 @@ class WatchmakerCore
         $cronLine = trim($cronLine);
         $arr = explode(' ', $cronLine, 6);
         if (count($arr) !== 6) {
-            // @todo : コメント等の処理以外の行が無視される
-            // @todo : 単純に6個に分割だと、コメントの中に6個分割があるとエラーになる
-            throw new CronLineParseException();
+            // not cron line
+            return $instance
+                ->manage(false)
+                ->rawLine($cronLine);
         }
 
         $instance = $instance
@@ -168,6 +172,22 @@ class WatchmakerCore
         return $new;
     }
 
+    public function manage(bool $manage) : self
+    {
+        $new = clone $this;
+        $new->manage = $manage;
+
+        return $new;
+    }
+
+    public function rawLine(string $rawLine) : self
+    {
+        $new = clone $this;
+        $new->rawLine = $rawLine;
+
+        return $new;
+    }
+
     public function installed() : self
     {
         $new = clone $this;
@@ -207,6 +227,11 @@ class WatchmakerCore
         return $this->mark === self::CRON_ONLY;
     }
 
+    public function isManage() : bool
+    {
+        return $this->manage;
+    }
+
     /*public function isInstalled() : bool
     {
         $originList = CrontabLoader::load();
@@ -223,6 +248,10 @@ class WatchmakerCore
 
     public function generate() : string
     {
-        return sprintf("%s %s %s %s %s %s\n", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
+        if ($this->manage === true) {
+            return sprintf("%s %s %s %s %s %s\n", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
+        } else {
+            return $this->rawLine;
+        }
     }
 }

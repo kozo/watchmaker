@@ -26,7 +26,7 @@ class Show
 
         // for installed / not installed
         $output .= $this->decorator->alert('Installed / Not Install');
-        $newList = Diff::execute($taskList, $cronList);
+        $newList = Diff::execute($taskList, $cronList, true);
         foreach ($newList as $task)
         {
             $output .= $this->showLine($task);
