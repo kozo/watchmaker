@@ -4,7 +4,7 @@ namespace Watchmaker\task;
 
 use Watchmaker\lib\CrontabLoader;
 use Watchmaker\lib\CronWriter;
-use Watchmaker\lib\Diff;
+use Watchmaker\lib\Marge;
 
 class Install
 {
@@ -12,7 +12,7 @@ class Install
     {
         $cronList = CrontabLoader::load();
 
-        $newList = Diff::execute($taskList, $cronList);
+        $newList = Marge::execute($taskList, $cronList);
 
         $cron = new CronWriter();
         $ret = $cron->write($newList);

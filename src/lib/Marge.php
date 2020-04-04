@@ -6,26 +6,11 @@ namespace Watchmaker\lib;
 use Watchmaker\Watchmaker;
 use Watchmaker\WatchmakerCore;
 
-class Diff
+class Marge
 {
     public static function execute($watchmakerList, $cronList, $skipUnManage = false)
     {
         $newList = [];
-
-        // check install or not install
-        foreach ($watchmakerList as $watchmaker)
-        {
-            $watchmakerLine = $watchmaker->generate();
-            foreach ($cronList as $cron)
-            {
-                if ($watchmakerLine === $cron->generate()) {
-                    $newList[] = $watchmaker->installed();
-                    continue 2;
-                }
-            }
-
-            $newList[] = $watchmaker->notInstalled();
-        }
 
         // check cron only
         $config = Watchmaker::getConfig();
@@ -46,6 +31,21 @@ class Diff
                     $newList[] = $cron->cronOnly();
                 }
             }
+        }
+
+        // check install or not install
+        foreach ($watchmakerList as $watchmaker)
+        {
+            $watchmakerLine = $watchmaker->generate();
+            foreach ($cronList as $cron)
+            {
+                if ($watchmakerLine === $cron->generate()) {
+                    $newList[] = $watchmaker->installed();
+                    continue 2;
+                }
+            }
+
+            $newList[] = $watchmaker->notInstalled();
         }
 
         return $newList;

@@ -249,7 +249,7 @@ class WatchmakerCore
     public function generate() : string
     {
         if ($this->manage === true) {
-            return sprintf("%s %s %s %s %s %s\n", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
+            return sprintf("%s %s %s %s %s %s", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
         } else {
             return $this->rawLine;
         }
