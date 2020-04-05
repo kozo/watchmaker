@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Watchmaker;
 
-use Watchmaker\error\CronLineParseException;
-use Watchmaker\lib\CrontabLoader;
-
 class WatchmakerCore
 {
     private $command = '';
@@ -35,7 +32,6 @@ class WatchmakerCore
     /**
      * @param $cronLine
      * @return WatchmakerCore
-     * @throws CronLineParseException
      */
     public static function parse($cronLine) : WatchmakerCore
     {

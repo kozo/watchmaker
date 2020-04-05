@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Watchmaker\lib;
 
-// @todo : クラス名Diffじゃない.　そもそもここでいいのか？
 use Watchmaker\Watchmaker;
-use Watchmaker\WatchmakerCore;
 
 class Marge
 {
@@ -25,8 +23,6 @@ class Marge
                     }
                 }
 
-                dump($skipUnManage);
-                dump($cron);
                 if ($skipUnManage === true && $cron->isManage() === true) {
                     $newList[] = $cron->cronOnly();
                 }

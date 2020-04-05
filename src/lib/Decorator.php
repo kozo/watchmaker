@@ -87,8 +87,10 @@ class Decorator
         $this->collector->text($d);
     }
 
-    public function newLine()
+    public function newLine($line = 1)
     {
-        $this->collector->text("\n", false);
+        for ($i=0; $i < $line; $i++) {
+            $this->collector->text("\n", false);
+        }
     }
 }

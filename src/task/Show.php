@@ -3,15 +3,14 @@ declare(strict_types=1);
 namespace Watchmaker\task;
 
 use Watchmaker\lib\CrontabLoader;
-use Watchmaker\lib\Marge;
-use Watchmaker\lib\LockLoader;
 use Watchmaker\lib\Decorator;
+use Watchmaker\lib\Marge;
 use Watchmaker\lib\StringCollector;
 use Watchmaker\WatchmakerCore;
 
 class Show
 {
-    private $decorator = null;
+    private $decorator;
     private $isAllGreen = true;
 
     public function execute(array $taskList)
@@ -23,17 +22,14 @@ class Show
 
         $this->decorator->newLine();
         $this->decorator->hr();
-        // echo "# Kairos\n\n";
 
         // for installed / not installed
-        $this->decorator->alert('Installed / Not Install');
+        $this->decorator->alert('Installed / Not Install / cron only');
         $newList = Marge::execute($taskList, $cronList, true);
         foreach ($newList as $task)
         {
             $this->showLine($task);
         }
-
-        $this->decorator->newLine();
 
         $this->decorator->newLine();
 
@@ -43,7 +39,6 @@ class Show
             $this->decorator->flashError();
         }
 
-        $this->decorator->newLine();
         $this->decorator->hr();
 
         return $collector->generate();
