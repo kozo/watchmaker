@@ -2,26 +2,44 @@
 declare(strict_types=1);
 namespace Watchmaker\lib;
 
+use Watchmaker\error\FailedInstallCrontabException;
+use Watchmaker\error\NotInstalledCrontabException;
+
 class CronWriter
 {
-    public function write(array $watchmakerList)
+    public function write(array $watchmakerList) : bool
     {
         $ret = $this->isInstalledCrontab();
         if ($ret === false) {
-            return;
+            throw new NotInstalledCrontabException();
         }
 
-        if(($cron = popen("/usr/bin/crontab -", "w"))){
-            foreach ($watchmakerList as $watchmaker)
-            {
-                fputs($cron, $watchmaker->generate());
-            }
-            //fputs($cron, $s);
-            //fputs($cron, "*  *  *  *  *  df -h > dev/null 2>&1\n");
+        $error = fopen('php://temp', 'wb+');
+        $descriptorspec = [
+            0 => array('pipe', 'r'),
+            1 => array('pipe', 'w'),
+            2 => $error
+        ];
+        $process = proc_open('/usr/bin/crontab -', $descriptorspec, $pipes);
+        stream_set_blocking($pipes[1], false);
 
-            pclose($cron);
-            return true;
+        foreach ($watchmakerList as $watchmaker)
+        {
+            fputs($pipes[0], $watchmaker->generate() . "\n");
         }
+        fclose($pipes[0]);
+        fclose($pipes[1]);
+
+        $ret = proc_close($process);
+        if ($ret !== 0) {
+            // error
+            // proc_closeした後に、エラーが出力される
+            fseek($error, 0);
+            $errorMessage = stream_get_contents($error);
+            throw new FailedInstallCrontabException($errorMessage);
+        }
+
+        fclose($error);
 
         return false;
     }

@@ -42,7 +42,6 @@ class WatchmakerCore
         if (count($arr) !== 6) {
             // not cron line
             return $instance
-                ->manage(false)
                 ->rawLine($cronLine);
         }
 
@@ -180,6 +179,7 @@ class WatchmakerCore
     {
         $new = clone $this;
         $new->rawLine = $rawLine;
+        $new->manage = false;
 
         return $new;
     }

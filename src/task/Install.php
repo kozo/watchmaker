@@ -19,6 +19,6 @@ class Install
         if ($ret === false) {
             echo "hogehoge";
         }//*/
-        dump($newList);
+        //dump($newList);
     }
 }
