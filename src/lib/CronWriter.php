@@ -7,6 +7,12 @@ use Watchmaker\error\NotInstalledCrontabException;
 
 class CronWriter
 {
+    /**
+     * @param array $watchmakerList
+     * @return bool
+     * @throws FailedInstallCrontabException
+     * @throws NotInstalledCrontabException
+     */
     public function write(array $watchmakerList) : bool
     {
         $ret = $this->isInstalledCrontab();

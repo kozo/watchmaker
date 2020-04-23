@@ -4,7 +4,7 @@ namespace Watchmaker\task;
 
 use Watchmaker\lib\CrontabLoader;
 use Watchmaker\lib\Decorator;
-use Watchmaker\lib\Marge;
+use Watchmaker\lib\Merge;
 use Watchmaker\lib\StringCollector;
 use Watchmaker\WatchmakerCore;
 
@@ -25,7 +25,7 @@ class Show
 
         // for installed / not installed
         $this->decorator->alert('Installed / Not Install / cron only');
-        $newList = Marge::execute($taskList, $cronList, true);
+        $newList = Merge::execute($taskList, $cronList/*, true*/);
         foreach ($newList as $task)
         {
             $this->showLine($task);

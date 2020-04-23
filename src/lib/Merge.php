@@ -4,15 +4,17 @@ namespace Watchmaker\lib;
 
 use Watchmaker\Watchmaker;
 
-class Marge
+class Merge
 {
-    public static function execute($watchmakerList, $cronList, $skipUnManage = false)
+    public static function execute($watchmakerList, $cronList/*, $skipUnManage = false*/)
     {
         $newList = [];
 
+        // @todo : ここでは削除フラグなどをみらずに、とりあえず一覧を作成する方がいいかも(インストールされているのか、cronのみにあるのか、インストールされてないのかのフラグを設定し名が)
+        //         そんで、出来上がった一覧を表示するとき、インストールするときにフラグを見ながら処理をする
         // check cron only
         $config = Watchmaker::getConfig();
-        if ($config->delete === false) {
+        //if ($config->delete === false) {
             foreach ($cronList as $cron)
             {
                 $cronLine = $cron->generate();
@@ -23,11 +25,11 @@ class Marge
                     }
                 }
 
-                if ($skipUnManage === true && $cron->isManage() === true) {
+                //if ($skipUnManage === true && $cron->isManage() === true) {
                     $newList[] = $cron->cronOnly();
-                }
+                //}
             }
-        }
+        //}
 
         // check install or not install
         foreach ($watchmakerList as $watchmaker)
