@@ -25,7 +25,7 @@ class Show
 
         // for installed / not installed
         $this->decorator->alert('Installed / Not Install / cron only');
-        $newList = Merge::execute($taskList, $cronList/*, true*/);
+        $newList = Merge::execute($taskList, $cronList);
         foreach ($newList as $task)
         {
             $this->showLine($task);

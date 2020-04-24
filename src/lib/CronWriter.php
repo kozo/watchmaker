@@ -47,7 +47,7 @@ class CronWriter
 
         fclose($error);
 
-        return false;
+        return true;
     }
 
     private function isInstalledCrontab() : bool
