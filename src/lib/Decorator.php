@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Watchmaker\lib;
 
-use JakubOnderka\PhpConsoleColor\ConsoleColor;
-
 class Decorator
 {
     private $color = null;
@@ -53,29 +51,31 @@ class Decorator
     public function flashSuccess($message = ' All Installed')
     {
         $width  = intval(trim(`tput cols`));
+        $length = mb_strlen($message);
 
         $text = '';
-        $b = $this->color->apply("color_22", str_repeat('-', $width));
-        $text .= $this->color->apply("bg_color_22", $b) . "\n";
-        $b = $this->color->apply("color_20", str_repeat(' ', $width-14));
-        $text .= $this->color->apply("bg_color_22", $message . $b) . "\n";
-        $b = $this->color->apply("color_22", str_repeat('-', $width));
-        $text .= $this->color->apply("bg_color_22", $b) . "\n";
+        $b = $this->color->apply('color_22', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_22', $b) . "\n";
+        $b = $this->color->apply('color_22', str_repeat('-', $width - $length));
+        $text .= $this->color->apply('bg_color_22', $message . $b) . "\n";
+        $b = $this->color->apply('color_22', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_22', $b) . "\n";
 
         $this->collector->text($text);
     }
 
-    public function flashError($message = ' crontab needs to be updated.')
+    public function flashError($message = ' Please update crontab.')
     {
         $width  = intval(trim(`tput cols`));
+        $length = mb_strlen($message);
 
         $text = '';
-        $b = $this->color->apply("color_1", str_repeat('-', $width));
-        $text .= $this->color->apply("bg_color_1", $b) . "\n";
-        $b = $this->color->apply("color_20", str_repeat(' ', $width - 29));
-        $text .= $this->color->apply("bg_color_1", $message . $b) . "\n";
-        $b = $this->color->apply("color_1", str_repeat('-', $width));
-        $text .= $this->color->apply("bg_color_1", $b) . "\n";
+        $b = $this->color->apply('color_1', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_1', $b) . "\n";
+        $b = $this->color->apply('color_1', str_repeat('-', $width - $length));
+        $text .= $this->color->apply('bg_color_1', $message . $b) . "\n";
+        $b = $this->color->apply('color_1', str_repeat('-', $width));
+        $text .= $this->color->apply('bg_color_1', $b) . "\n";
 
         $this->collector->text($text);
     }
