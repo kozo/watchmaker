@@ -4,7 +4,12 @@ namespace Watchmaker\lib;
 
 class Merge
 {
-    public static function execute($watchmakerList, $cronList/*, $skipUnManage = false*/)
+    /**
+     * @param $watchmakerList
+     * @param $cronList
+     * @return array
+     */
+    public static function execute($watchmakerList, $cronList/*, $skipUnManage = false*/): array
     {
         $newList = [];
 

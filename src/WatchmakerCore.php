@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Watchmaker;
 
+use Watchmaker\error\EmptyCommandException;
+
 class WatchmakerCore
 {
     private $command = '';
@@ -63,7 +65,7 @@ class WatchmakerCore
     public function month($v) : self
     {
         $new = clone $this;
-        $new->month = $v;
+        $new->month = (string)$v;
 
         return $new;
     }
@@ -75,7 +77,7 @@ class WatchmakerCore
     public function day($v) : self
     {
         $new = clone $this;
-        $new->day = $v;
+        $new->day = (string)$v;
 
         return $new;
     }
@@ -87,7 +89,7 @@ class WatchmakerCore
     public function hour($v) : self
     {
         $new = clone $this;
-        $new->hour = $v;
+        $new->hour = (string)$v;
 
         return $new;
     }
@@ -99,7 +101,7 @@ class WatchmakerCore
     public function minute($v) : self
     {
         $new = clone $this;
-        $new->minute = $v;
+        $new->minute = (string)$v;
 
         return $new;
     }
@@ -111,7 +113,7 @@ class WatchmakerCore
     public function week($v) : self
     {
         $new = clone $this;
-        $new->week = $v;
+        $new->week = (string)$v;
 
         return $new;
     }
@@ -242,9 +244,17 @@ class WatchmakerCore
         return false;
     }*/
 
+
+    /**
+     * @return string
+     * @throws EmptyCommandException
+     */
     public function generate() : string
     {
         if ($this->manage === true) {
+            if (empty($this->command)) {
+                throw new EmptyCommandException();
+            }
             return sprintf("%s %s %s %s %s %s", $this->minute, $this->hour, $this->day, $this->month, $this->week, $this->command);
         } else {
             return $this->rawLine;
