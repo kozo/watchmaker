@@ -7,7 +7,7 @@ use Watchmaker\task\Show;
 
 class Watchmaker
 {
-    private static $config = [];
+    private static $config;
     private $taskList = [];
 
     public function __construct(Config $config)
