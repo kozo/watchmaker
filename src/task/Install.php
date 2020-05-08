@@ -11,6 +11,8 @@ use Watchmaker\Watchmaker;
 
 class Install
 {
+    private $decorator;
+
     public function execute(array $taskList)
     {
         $collector = new StringCollector();
