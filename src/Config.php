@@ -4,6 +4,11 @@ namespace Watchmaker;
 
 use Watchmaker\error\MissingParameterException;
 
+
+/**
+ * @property-read string $ansi
+ * @property-read string $delete
+ */
 class Config
 {
     private $ansi = false;
@@ -29,6 +34,11 @@ class Config
         }
     }
 
+    /**
+     * @param $get
+     * @return mixed
+     * @throws MissingParameterException
+     */
     public function __get($get)
     {
         if (isset($this->{$get})) {
