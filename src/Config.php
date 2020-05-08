@@ -4,6 +4,11 @@ namespace Watchmaker;
 
 use Watchmaker\error\MissingParameterException;
 
+
+/**
+ * @property-read string $ansi
+ * @property-read string $delete
+ */
 class Config
 {
     private $ansi = false;
@@ -17,7 +22,7 @@ class Config
     private function init($options)
     {
         if (empty($options)) {
-            return ;
+            return;
         }
 
         foreach ($options as $key => $val)
@@ -29,6 +34,11 @@ class Config
         }
     }
 
+    /**
+     * @param $get
+     * @return mixed
+     * @throws MissingParameterException
+     */
     public function __get($get)
     {
         if (isset($this->{$get})) {
