@@ -3,6 +3,23 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/kozo/watchmaker.svg?style=flat-square)](https://circleci.com/gh/kozo/watchmaker)
 [![Scrutinizer code quality (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/quality/g/kozo/watchmaker.svg?style=flat-square)](https://scrutinizer-ci.com/g/kozo/watchmaker/)
 
+Watchmaker is a library to manage "crontab" with code.
+
+## requirements
+
+- PHP 7.2+
+
+## Usage
+
+Watchmaker is supported by the following frameworks.
+Use the framework's wrapper.
+
+- For Laravel
+  - [quartz](https://github.com/kozo/quartz)
+
+- For CakePHP3, CakePHP 4
+
+
 - [ ] dragonmantank/cron-expressionを利用してcronの書式をチェックする
 - [x] ~~テンプレート作成機能を作る~~
 - [ ] オプションを追加する
