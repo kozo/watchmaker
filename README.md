@@ -1,4 +1,7 @@
-# watchmaker
+# Watchmaker
+
+[![CircleCI](https://img.shields.io/circleci/build/github/kozo/watchmaker.svg)](https://circleci.com/gh/kozo/watchmaker)
+[![Scrutinizer code quality (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/quality/g/kozo/watchmaker.svg)](https://scrutinizer-ci.com/g/kozo/watchmaker/)
 
 - [ ] dragonmantank/cron-expressionを利用してcronの書式をチェックする
 - [x] ~~テンプレート作成機能を作る~~
