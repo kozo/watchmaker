@@ -22,7 +22,7 @@ class Config
     private function init($options)
     {
         if (empty($options)) {
-            return ;
+            return;
         }
 
         foreach ($options as $key => $val)
