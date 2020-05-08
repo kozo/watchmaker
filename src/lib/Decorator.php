@@ -82,14 +82,14 @@ class Decorator
 
     public function hr()
     {
-        $width  = intval(trim(`tput cols`));
+        $width = intval(trim(`tput cols`));
         $d = str_repeat('-', $width) . "\n";
         $this->collector->text($d);
     }
 
     public function newLine($line = 1)
     {
-        for ($i=0; $i < $line; $i++) {
+        for ($i = 0; $i < $line; $i++) {
             $this->collector->text("\n", false);
         }
     }
