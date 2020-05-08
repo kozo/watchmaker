@@ -36,11 +36,11 @@ class Install
         $installList = [];
         $config = Watchmaker::getConfig();
 
-        foreach($mergeList as $watchmakerCore)
+        foreach ($mergeList as $watchmakerCore)
         {
             if ($watchmakerCore->isCronOnly() === true)
             {
-                if ($config->delete === true){
+                if ($config->delete === true) {
                     continue;
                 }
             }
