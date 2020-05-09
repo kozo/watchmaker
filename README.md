@@ -26,6 +26,8 @@ Use the framework's wrapper.
 - [ ] dragonmantank/cron-expressionを利用してcronの書式をチェックする
 - [x] ~~テンプレート作成機能を作る~~
 - [ ] オプションを追加する
+  - [ ] 引数nameを classに変更 (ショートはc)
+  - [ ] 引数ネームスペースにショートを追加 (n)
   - [ ] -b バックアップオプション
   - [ ] -d watchmakerに存在しないものはcronから削除する
   - [ ] -f watchmakerに存在しないものはcronから削除する(-d よりこっちがいいかな？コメント行の管理とかがむずすぎる. forceモードで完全に上書きする)
