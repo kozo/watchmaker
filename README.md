@@ -41,3 +41,5 @@ Use the framework's wrapper.
   - [ ] watchmaker
   - [ ] quartz
   - [ ] mechanical
+    - [x] CakePHP4対応
+    - [ ] CakePHP3対応
