@@ -8,6 +8,7 @@ Watchmaker is a library to manage "crontab" with code.
 ## requirements
 
 - PHP 7.2+
+- crontab
 
 ## Usage
 
