@@ -49,10 +49,10 @@ class Show
         if ($watchmaker->isInstalled()) {
             $this->decorator->greenText("[ ✔ ]\t" . $watchmaker->generate());
         } elseif ($watchmaker->isNotInstalled()) {
-            $this->decorator->yellowText("[ ➖ ]\t" . $watchmaker->generate());
+            $this->decorator->yellowText("[ - ]\t" . $watchmaker->generate());
             $this->isAllGreen = false;
         } elseif ($watchmaker->isCronOnly()) {
-            $this->decorator->redText("[ ❌ ]\t" . $watchmaker->generate());
+            $this->decorator->redText("[ ✖ ]\t" . $watchmaker->generate());
             $this->isAllGreen = false;
         }
     }
